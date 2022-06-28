@@ -33,18 +33,17 @@ class Project(models.Model):
     title = models.CharField(max_length=128)
     description = models.TextField(max_length=2048)
     type = models.CharField(choices=TYPE_CHOICES, max_length=128)
-    author = models.ForeignKey(to=settings.AUTH_USER_MODEL, related_name='author', on_delete=models.CASCADE)
 
 
 class Contributor(models.Model):
     user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='contributors')
-    role = models.CharField(choices=ROLE, default='CONTRIBUTOR', max_length=128)
+    role = models.CharField(choices=ROLE, default='AUTHOR', max_length=128)
 
 
 class Issue(models.Model):
     title = models.CharField(max_length=128)
-    desc = models.TextField(max_length=2048)
+    description = models.TextField(max_length=2048)
     tag = models.CharField(choices=TAG_CHOICES, max_length=100)
     priority = models.CharField(choices=PRIORITY_CHOICES, default='LOW', max_length=100)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)

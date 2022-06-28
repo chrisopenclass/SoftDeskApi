@@ -8,7 +8,7 @@ class ProjectSerializer(ModelSerializer):
 
     class Meta:
         model = Project
-        fields = ['id', 'title', 'description', 'type', 'author']
+        fields = ['id', 'title', 'description', 'type']
 
 
 class ProjectDetailSerializer(ModelSerializer):
@@ -17,16 +17,15 @@ class ProjectDetailSerializer(ModelSerializer):
 
     class Meta:
         model = Project
-        fields = ['id', 'title', 'description', 'type', 'author', 'issues', 'users']
+        fields = ['id', 'title', 'description', 'type', 'issues', 'users']
 
 
 class IssueSerializer(ModelSerializer):
-    assignee_user_id = StringRelatedField()
 
     class Meta:
         model = Issue
-        fields = ['id', 'title', 'description', 'tag', 'priority', 'project_id', 'status', 'author',
-                  'assignee_user_id', 'created_time', 'comments']
+        fields = ['id', 'author', 'title', 'description', 'tag', 'priority', 'project', 'status',
+                  'assignee', 'created_time']
 
 
 class CommentSerializer(ModelSerializer):
@@ -37,8 +36,7 @@ class CommentSerializer(ModelSerializer):
 
 
 class ContributorSerializer(ModelSerializer):
-    user_id = StringRelatedField()
 
     class Meta:
         model = Contributor
-        fields = ['user_id', 'role']
+        fields = ['user', 'role', 'project']
