@@ -6,10 +6,13 @@ from .serializer import (
     CommentSerializer,
     IssueSerializer,
 )
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from .permissions import IsAuthorOrReadOnly
 
 
 class ProjectViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated, IsAuthorOrReadOnly]
 
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
@@ -34,6 +37,8 @@ class ProjectViewSet(viewsets.ModelViewSet):
 
 
 class ContributorsViewset(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated, IsAuthorOrReadOnly]
+
     serializer_class = ContributorSerializer
 
     def get_queryset(self):
@@ -59,6 +64,7 @@ class ContributorsViewset(viewsets.ModelViewSet):
 
 
 class IssueViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated, IsAuthorOrReadOnly]
 
     serializer_class = IssueSerializer
 
@@ -68,8 +74,6 @@ class IssueViewSet(viewsets.ModelViewSet):
     def create(self, request, project_pk=None):
         data = request.data.copy()
         author = request.user.id
-        print("UNE GROSSE STRING BIEN VISIBLE")
-        print(author)
         serialized_data = IssueSerializer(data={
             **dict(data.items()),
             "author": author,
@@ -80,18 +84,7 @@ class IssueViewSet(viewsets.ModelViewSet):
         return Response(serialized_data.data, status=status.HTTP_201_CREATED)
 
 
-class CommentViewSet(viewsets.ModelViewSet):
-
+class CommentViewSet(viewsets.ModelViewSet, IsAuthorOrReadOnly):
+    queryset = Comment.objects.all()
     serializer_class = CommentSerializer
-
-    def get_queryset(self):
-        return Comment.objects.filter(issue=self.kwargs["issue_pk"])
-
-    def create(self, request, project_pk=None, issue_pk=None):
-        data = request.data.copy()
-        data["issue"] = issue_pk
-        serialized_data = CommentSerializer(data=data)
-        serialized_data.is_valid(raise_exception=True)
-        serialized_data.save()
-
-        return Response(serialized_data.data, status=status.HTTP_201_CREATED)
+    permission_classes = [IsAuthenticated, IsAuthorOrReadOnly]
