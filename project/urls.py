@@ -4,13 +4,13 @@ from django.urls import path, include
 
 
 router = routers.SimpleRouter()
-router.register("projects", ProjectViewSet)
+router.register(r'projects', ProjectViewSet)
 
 projects_router = routers.NestedSimpleRouter(router, "projects", lookup="project")
-projects_router.register("issues", IssueViewSet, basename="projects-issues")
-projects_router.register("users", ContributorsViewset, basename="projects-contributor")
+projects_router.register(r'issues', IssueViewSet, basename="projects-issues")
+projects_router.register(r'users', ContributorsViewset, basename="projects-contributor")
 
-issues_router = routers.NestedSimpleRouter(projects_router, "issues", lookup="issue")
+issues_router = routers.NestedSimpleRouter(projects_router, r'issues', lookup="issue")
 issues_router.register(r'comments', CommentViewSet, basename="issues-comments")
 
 urlpatterns = [

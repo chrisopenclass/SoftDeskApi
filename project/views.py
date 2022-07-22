@@ -85,6 +85,32 @@ class IssueViewSet(viewsets.ModelViewSet):
 
 
 class CommentViewSet(viewsets.ModelViewSet, IsAuthorOrReadOnly):
-    queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     permission_classes = [IsAuthenticated, IsAuthorOrReadOnly]
+
+    def create(self, request, issue_pk=None, project_pk=None):
+        data = request.data.copy()
+        author = request.user.id
+        serialized_data = CommentSerializer(data={
+            **dict(data.items()),
+            "author": author,
+            "issue": issue_pk,
+        })
+        serialized_data.is_valid(raise_exception=True)
+        serialized_data.save()
+        return Response(serialized_data.data, status=status.HTTP_201_CREATED)
+
+    def get_queryset(self):
+        return Comment.objects.filter(issue=self.kwargs["issue_pk"])
+
+    def update(self, request, project_pk=None, issue_pk=None, comment_pk=None, pk=None):
+        data = request.data.copy()
+        instance = self.get_object()
+        serializer = CommentSerializer(data={
+            **dict(data.items()),
+            "id": instance.id,
+            "author": instance.author.id,
+            "issue": instance.issue.id,
+        })
+        serializer.is_valid(raise_exception=True)
+        return super().update(serializer, status=status.HTTP_201_CREATED)
