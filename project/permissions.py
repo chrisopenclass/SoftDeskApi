@@ -2,7 +2,7 @@ from rest_framework import permissions
 
 
 class IsAuthorOrReadOnly(permissions.BasePermission):
-    message = "Seul un auteur ou contributeur peut effectuer des opérations"
+    message = "pAccess Denied You don't have permission to access"
 
     def has_object_permission(self, request, view,  obj):
 
