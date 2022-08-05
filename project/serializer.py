@@ -22,9 +22,12 @@ class ProjectDetailSerializer(serializers.ModelSerializer):
 
 class ContributorSerializer(serializers.ModelSerializer):
 
-    class Meta:
+    class Meta(object):
         model = Contributor
-        fields = ['user', 'role', 'project']
+        fields = ('id',
+                  'user',
+                  'project',
+                  )
 
 
 class IssueSerializer(serializers.ModelSerializer):
@@ -32,8 +35,8 @@ class IssueSerializer(serializers.ModelSerializer):
     class Meta:
         model = Issue
         fields = ['id', 'title', 'description', 'tag', 'priority', 'status',
-                  'assignee']
-        read_only_fields = ['author', 'project', 'created_time']
+                  'assignee', 'author', 'project']
+        read_only_fields = ['created_time']
 
     def update(self, instance, validated_data):
         return super().update(instance, validated_data)
