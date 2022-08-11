@@ -184,7 +184,7 @@ Quit the server with CONTROL-C.
 
 Pour utiliser l'API, vous pouvez consulter la documentation de cette dernière sur l'URL suivant:
 
-- https://documenter.getpostman.com/view/13028407/UyrAGHXd
+- https://documenter.getpostman.com/view/19321113/VUjLM7Td
 
 
 [<div align="center">[Table of Contents]</div>](#Table_of_Contents)
