@@ -87,7 +87,7 @@ $ pip install venv
 
 ```ssh
 
-$ cd DA_Python_P10
+$ cd SoftDeskApi
 $ python3 -m venv .venv
 
 ```
