@@ -57,7 +57,7 @@ class ContributorsViewset(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Contributor.objects.all()
+        return Contributor.objects.filter(project=self.kwargs["project_pk"])
 
     def create(self, request, project_pk):
         project = project_pk
@@ -83,7 +83,6 @@ class IssueViewSet(viewsets.ModelViewSet):
     def create(self, request, project_pk=None):
         data = request.data.copy()
         author = request.user.id
-        print(author)
         serialized_data = IssueSerializer(data={
             **dict(data.items()),
             "author": author,
